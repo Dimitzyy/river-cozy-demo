@@ -1,71 +1,74 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>River Cozy Demo</title>
-  <style>
-    html, body {
-      margin: 0;
-      padding: 0;
-      overflow: hidden;
-      background: #eaf7f1;
-    }
-    canvas {
-      display: block;
-    }
-    .hint {
-      position: fixed;
-      bottom: 20px;
-      width: 100%;
-      text-align: center;
-      font-family: sans-serif;
-      color: #555;
-      opacity: 0.8;
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>River Cozy Demo</title>
+<style>
+html, body {
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background: #eaf7f1;
+}
+canvas { display: block; }
+.hint {
+  position: fixed;
+  bottom: 16px;
+  width: 100%;
+  text-align: center;
+  font-family: sans-serif;
+  color: #555;
+  opacity: 0.8;
+}
+</style>
 </head>
 <body>
 
-<canvas id="game"></canvas>
+<canvas id="c"></canvas>
 <div class="hint">Tap layar untuk membangun sungai 🌊</div>
 
 <script>
-const canvas = document.getElementById("game");
-const ctx = canvas.getContext("2d");
+const c = document.getElementById("c");
+const ctx = c.getContext("2d");
 
 function resize() {
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
+  c.width = innerWidth;
+  c.height = innerHeight;
 }
-window.addEventListener("resize", resize);
+addEventListener("resize", resize);
 resize();
 
-// gambar background
-function drawBackground() {
-  ctx.fillStyle = "#eaf7f1";
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
-}
+ctx.fillStyle = "#eaf7f1";
+ctx.fillRect(0,0,c.width,c.height);
 
-drawBackground();
-
-canvas.addEventListener("click", (e) => {
-  const x = e.clientX;
-  const y = e.clientY;
-
-  ctx.strokeStyle = "#4aa3c7";
-  ctx.lineWidth = 18;
-  ctx.lineCap = "round";
+function drawRiver(x, y) {
+  let px = x;
+  let py = y;
 
   ctx.beginPath();
-  ctx.moveTo(x - 100, y - 50);
-  ctx.quadraticCurveTo(
-    x,
-    y + 60,
-    x + 120,
-    y + 100
-  );
+  ctx.moveTo(px, py);
+
+  for (let i = 0; i < 30; i++) {
+    px += Math.random() * 40 - 20;
+    py += 30 + Math.random() * 20;
+    ctx.lineTo(px, py);
+  }
+
+  // badan sungai
+  ctx.strokeStyle = "#4aa3c7";
+  ctx.lineWidth = 40;
+  ctx.lineCap = "round";
   ctx.stroke();
+
+  // lapisan air terang
+  ctx.strokeStyle = "rgba(255,255,255,0.25)";
+  ctx.lineWidth = 18;
+  ctx.stroke();
+}
+
+c.addEventListener("click", e => {
+  drawRiver(e.clientX, e.clientY);
 });
 </script>
 
